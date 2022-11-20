@@ -4,5 +4,10 @@
   "description": "Contains common code for Minecraft TS",
   "author": "zani",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@lilithmod/unborn-mcproto": "^0.13.0",
+    "@minecraftts/logger": "^1.0.0",
+    "@types/node": "^18.11.9"
+  }
 }
