@@ -1,4 +1,4 @@
-import { PacketReader } from "@lilithmod/unborn-mcproto";
+import LengthPrefixedBufferSerializer from "../../../serializers/LengthPrefixedBufferSerializer";
 import Packet from "../../Packet";
 
 export default class S01EncryptionResponse extends Packet<S01EncryptionResponse> {
@@ -7,14 +7,8 @@ export default class S01EncryptionResponse extends Packet<S01EncryptionResponse>
     public sharedSecret: Buffer = Buffer.alloc(0);
     public verifyToken: Buffer = Buffer.alloc(0);
 
-    public register(): void {}
-    
-    public deserialize(reader: PacketReader): Packet {
-        const packet = new S01EncryptionResponse();
-
-        packet.sharedSecret = reader.read(reader.readVarInt());
-        packet.verifyToken = reader.read(reader.readVarInt());
-
-        return packet;
+    public register(): void {
+        this.addSerializableField("sharedSecret", "custom", LengthPrefixedBufferSerializer.serialize, LengthPrefixedBufferSerializer.deserialize);
+        this.addSerializableField("verifyToken", "custom", LengthPrefixedBufferSerializer.serialize, LengthPrefixedBufferSerializer.deserialize);
     }
 }

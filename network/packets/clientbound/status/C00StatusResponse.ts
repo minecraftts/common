@@ -23,6 +23,6 @@ export default class C00StatusResponse extends Packet<C00StatusResponse> {
     } = <any>{};
 
     public register(): void {
-        this.addSerializableField("body", "custom", JsonSerializer.jsonSerializer, JsonSerializer.jsonDeserializer);
+        this.addSerializableField("body", "custom", JsonSerializer.serialize, JsonSerializer.deserialize);
     }
 }
