@@ -1,9 +1,12 @@
 import { PacketWriter, PacketReader } from "@lilithmod/unborn-mcproto";
 import { Logger } from "@minecraftts/logger";
 import ChatMessage from "../../chat/ChatMessage";
+import StaticImplements from "../../util/StaticImplements";
+import ISerializer from "./ISerializer";
 
-export default class ChatSerialize {
-    public static chatSerializer(writer: PacketWriter, value: ChatMessage | string): void {
+@StaticImplements<ISerializer>()
+export default class ChatSerializer {
+    public static serialize(writer: PacketWriter, value: ChatMessage | string): void {
         if (typeof value === "string") {
             writer.writeString(value)
         } else {
@@ -11,7 +14,7 @@ export default class ChatSerialize {
         }
     }
 
-    public static chatDeserializer(reader: PacketReader): ChatMessage | string {
+    public static deserialize(reader: PacketReader): ChatMessage | string {
         const data = reader.readString();
 
         try {

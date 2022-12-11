@@ -1,9 +1,12 @@
 import { PacketReader, PacketWriter } from "@lilithmod/unborn-mcproto";
 import { NBT } from "prismarine-nbt";
 import Slot from "../../items/Slot";
+import StaticImplements from "../../util/StaticImplements";
+import ISerializer from "./ISerializer";
 
-export default class SlotSerialize {
-    public static slotSerializer(writer: PacketWriter, slot: Slot): void {
+@StaticImplements<ISerializer>()
+export default class SlotSerializer {
+    public static serialize(writer: PacketWriter, slot: Slot): void {
         writer.writeInt16(slot.itemId);
 
         if (slot.itemId !== -1 && "itemCount" in slot) {
@@ -18,7 +21,7 @@ export default class SlotSerialize {
         } 
     }
 
-    public static slotDeserializer(reader: PacketReader): Slot {
+    public static deserialize(reader: PacketReader): Slot {
         const itemId = reader.readInt16();
 
         if (itemId === -1) {

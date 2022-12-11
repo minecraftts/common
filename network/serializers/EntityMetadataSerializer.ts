@@ -3,10 +3,13 @@ import EntityMetadata from "../../entity/EntityMetadata";
 import EntityMetadataType from "../../entity/EntityMetadataType";
 import Rotation from "../../entity/Rotation";
 import Slot from "../../items/Slot";
-import SlotSerialize from "./SlotSerialize";
+import StaticImplements from "../../util/StaticImplements";
+import ISerializer from "./ISerializer";
+import SlotSerializer from "./SlotSerializer";
 
-export default class EntityMetadataSerialize {
-    public static serializeEntityMetadata(writer: PacketWriter, metadata: EntityMetadata): void {
+@StaticImplements<ISerializer>()
+export default class EntityMetadataSerializer {
+    public static serialize(writer: PacketWriter, metadata: EntityMetadata): void {
         for (const meta of metadata) {
             const item = (meta.type << 5 | meta.key & 0x1f) & 0xff;
 
@@ -29,7 +32,7 @@ export default class EntityMetadataSerialize {
                     writer.writeString(meta.value);
                     break;
                 case EntityMetadataType.SLOT:
-                    SlotSerialize.slotSerializer(writer, meta.value);
+                    SlotSerializer.serialize(writer, meta.value);
                     break;
                 case EntityMetadataType.POSITION:
                     writer.writeInt32(meta.value.x);
@@ -47,7 +50,7 @@ export default class EntityMetadataSerialize {
         writer.writeUInt8(0x7f);
     }
 
-    public static entityMetadataDeserializer(reader: PacketReader): EntityMetadata {
+    public static deserialize(reader: PacketReader): EntityMetadata {
         const metadata: EntityMetadata = [];
 
         while (true) {
@@ -83,7 +86,7 @@ export default class EntityMetadataSerialize {
                     value = reader.readString();
                     break;
                 case EntityMetadataType.SLOT:
-                    value = SlotSerialize.slotDeserializer(reader);
+                    value = SlotSerializer.deserialize(reader);
                     break;
                 case EntityMetadataType.POSITION:
                     value = {
