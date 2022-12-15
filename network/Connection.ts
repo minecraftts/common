@@ -148,6 +148,7 @@ export default class Connection {
     }
 
     public writePacket(packet: Packet): void {
+        packet.register();
         packet.preSerialize();
 
         this.writeRaw(packet.serialize().encode());
